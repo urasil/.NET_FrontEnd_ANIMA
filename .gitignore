@@ -1,0 +1,11 @@
+bin
+Fonts
+obj
+packages
+Properties
+App.config
+dotnetAnima.csproj
+dotnetAnima.csproj.user
+dotnetAnima.sln
+packages.config
+.vs
