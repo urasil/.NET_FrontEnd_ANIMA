@@ -19,7 +19,7 @@
                 <ControlTemplate TargetType="Button">
                     <Grid>
                         <Rectangle x:Name="RectangleOverlay"
-                                   Fill="Blue"
+                                   Fill="DeepSkyBlue"
                                    RadiusX="20" RadiusY="20"
                                    Opacity="1"/>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>

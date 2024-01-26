@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace dotnetAnima
 {
@@ -21,7 +22,20 @@ namespace dotnetAnima
     {
         public MainWindow()
         {
+            string path = @"../../animaProfiles";
             InitializeComponent();
+            if (Directory.Exists(path))
+            {
+                string[] directoriesWithinPath = Directory.GetFiles(path);
+                if (directoriesWithinPath.Length > 0)
+                {
+                    desc.Inlines.Clear();
+                    desc.Inlines.Add(new Run("                                                    Welcome Back!") { FontWeight = FontWeights.Bold });
+                    startButton.Content = "Text-to-Speech";
+                    startButton.Margin = new Thickness(136,319,282,47);
+                }
+            }
+
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)

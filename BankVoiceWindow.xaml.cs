@@ -60,9 +60,13 @@ namespace dotnetAnima
             }
 
             // Going to the next page
-            // TODO:: IMPLEMENT NEXT PAGE AND NAVIGATION
             if(this.buttonClickedCount == 12)
             {
+                TextToSpeechWindow speechWindow = new TextToSpeechWindow();
+                this.Close();
+                speechWindow.Left = this.Left;
+                speechWindow.Top = this.Top;
+                speechWindow.Show();
                 recorder.StopSound();
             }
             this.textCount++;
@@ -151,7 +155,6 @@ namespace dotnetAnima
                 if(stringList.Count > this.textCount)
                 {
                     pageText.Text = stringList[this.textCount];
-
                 }
             }  
             else 

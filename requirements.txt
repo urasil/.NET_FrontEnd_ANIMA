@@ -1,1 +1,2 @@
 NuAudio
+Newtonsoft.Json

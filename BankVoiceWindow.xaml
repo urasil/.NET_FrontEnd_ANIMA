@@ -126,7 +126,7 @@
                 Width="730" Margin="6,26,0,0"/>
 
             <!-- Speaking Line -->
-            <Image Source="Images/speechBubble.png" Margin="84,43,167,400" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.RowSpan="3"/>
+            <Image Source="Images/speechBubble.png" Margin="84,49,167,394" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.RowSpan="3"/>
             <Button Content="START READING"
             Name="lovelyButton"
             Foreground="White"

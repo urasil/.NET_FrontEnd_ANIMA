@@ -1,9 +1,5 @@
 bin
 Fonts
-obj
 packages
-Properties
-dotnetAnima.csproj
-dotnetAnima.csproj.user
-packages.config
+obj
 .vs

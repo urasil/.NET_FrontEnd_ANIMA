@@ -24,6 +24,7 @@
                 <RowDefinition Height="420"/>
             </Grid.RowDefinitions>
 
+            <!-- Anima Logo -->
             <TextBlock Text="Anima v3"
                        VerticalAlignment="Top"
                        HorizontalAlignment="Center"
@@ -41,25 +42,30 @@
                 </TextBlock.Effect>
             </TextBlock>
 
-            <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            </StackPanel>
-
+            <!-- Start Button -->
             <Button Content="START VOICE BANKING"
+             Name="startButton"
              Foreground="White"
-             Style="{StaticResource MenuButtonTheme}" Grid.Column="1" Grid.Row="2" Margin="136,334,282,32"
+             Style="{StaticResource MenuButtonTheme}" 
+             Grid.Column="1" 
+             Grid.Row="2" 
+             Margin="136,334,282,32"
              Click="ButtonClick"/>
 
+            <!-- Anima Title Photo -->
             <Image Source="Images/Anima Title.png" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="3,0,-21,15"/>
 
+            <!-- Soundwave Photo -->
             <Image Source="Images/soundwave.png" Grid.RowSpan="2" Margin="12,26,151,86" Grid.Row="1" Grid.Column="1"/>
 
+            <!-- Moto -->
             <TextBlock Text="The comprehensive voice banking solution"
-        VerticalAlignment="Top"
-        HorizontalAlignment="Left"
-        Foreground="Black"
-        FontSize="18"
-        Margin="128,80,0,0"
-        FontWeight="Bold" Grid.Column="1" Grid.Row="1" RenderTransformOrigin="0.43,-1.284" Grid.RowSpan="2">
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Foreground="Black"
+            FontSize="18"
+            Margin="128,92,0,0"
+            FontWeight="Bold" Grid.Column="1" Grid.Row="1" RenderTransformOrigin="0.43,-1.284" Grid.RowSpan="2">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black"
                        Direction="270"
@@ -68,13 +74,23 @@
                 </TextBlock.Effect>
             </TextBlock>
 
+            <!-- Description -->
             <TextBlock
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
             Foreground="Black"
             FontSize="18"
+            Name="desc"
             FontStyle="Italic"
-            FontWeight="Medium" Grid.Row="2" Grid.ColumnSpan="2" Margin="130,257,0,0"><Run Text="Voice banking involves recording your own voice, this can then be used to create a "/><LineBreak/><Run Language="en-gb" Text="&#x9;&#x9;    "/><Run Text="digital voice that can read text for you"/></TextBlock>
+            FontWeight="Medium" 
+            Grid.Row="2" 
+            Grid.ColumnSpan="2" 
+            Margin="130,257,0,0">
+            <Run Text="Voice banking involves recording your own voice, this can then be used to create a "/>
+            <LineBreak/>
+            <Run Language="en-gb" Text="&#x9;&#x9;    "/>
+            <Run Text="digital voice that can read text for you"/>
+            </TextBlock>
 
         </Grid>
     </Border>
