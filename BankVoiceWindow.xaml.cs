@@ -102,6 +102,7 @@ namespace dotnetAnima
                     border.Background = Brushes.DeepSkyBlue;
                 }
             }
+            lovelyButton.Content = "START READING";
             restartButton.Visibility = Visibility.Hidden;
             listenButton.Visibility = Visibility.Hidden;
 
