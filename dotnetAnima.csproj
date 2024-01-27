@@ -110,6 +110,9 @@
       <DependentUpon>BankVoiceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\AudioRecorder.cs" />
+    <Compile Include="ManageVoicesWindow.xaml.cs">
+      <DependentUpon>ManageVoicesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Test\SeperatorTest.cs" />
     <Compile Include="TextToSpeechWindow.xaml.cs">
       <DependentUpon>TextToSpeechWindow.xaml</DependentUpon>
@@ -123,6 +126,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ManageVoicesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
