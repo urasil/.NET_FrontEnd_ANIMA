@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
+using Newtonsoft.Json;
 
 namespace dotnetAnima
 {
@@ -26,14 +27,25 @@ namespace dotnetAnima
     public partial class BankVoiceWindow : Window
     {
         int progressCount, textCount, buttonClickedCount;
+        
         List<string> stringList;
         AudioRecorder recorder;
+
+        string frontendJsonFilePath;
+        private Dictionary<string, string> frontendJsonObject;
         public BankVoiceWindow()
         {
             InitializeComponent();
+        
             TextSeperator textSeperator = new TextSeperator();
-            recorder = new AudioRecorder();   
             stringList = textSeperator.ReadAndSeparateText();
+
+            recorder = new AudioRecorder();
+            
+            frontendJsonFilePath = @"../../frontend.json";
+            string frontendJsonContent = File.ReadAllText(frontendJsonFilePath);
+            frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
+            
             this.progressCount = 0;
             this.buttonClickedCount = 0;
             this.textCount = 0;
@@ -46,34 +58,44 @@ namespace dotnetAnima
             this.buttonClickedCount++;
 
             // Starting the voice recording
-            if(this.buttonClickedCount == 1)
+            if (this.buttonClickedCount == 1)
             {
                 recorder.StartRecording("../../output.wav");
                 restartButton.Visibility = Visibility.Visible;
             }
 
             // Ending the voice recording
-            if(this.buttonClickedCount == 11) 
+            if (this.buttonClickedCount == 11)
             {
                 recorder.StopRecording();
+                pageText.Visibility = Visibility.Hidden;
+                speakerName.Visibility = Visibility.Visible;
+                info.Visibility = Visibility.Visible;
+                info2.Visibility = Visibility.Visible;
                 listenButton.Visibility = Visibility.Visible;
             }
-
             // Going to the next page
-            if(this.buttonClickedCount == 12)
+            if (this.buttonClickedCount == 12)
             {
-                TextToSpeechWindow speechWindow = new TextToSpeechWindow();
-                this.Close();
-                speechWindow.Left = this.Left;
-                speechWindow.Top = this.Top;
-                speechWindow.Show();
-                recorder.StopSound();
+                FinishingUpWithRegistration();
             }
             this.textCount++;
             ChangeInstructions();
             ChangeButtonName();
             ChangeText();
             ChangeBorderColors();
+        }
+
+        public void FinishingUpWithRegistration()
+        {
+            string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
+            File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
+            TextToSpeechWindow speechWindow = new TextToSpeechWindow();
+            this.Close();
+            speechWindow.Left = this.Left;
+            speechWindow.Top = this.Top;
+            speechWindow.Show();
+            recorder.StopSound();
         }
 
         // Handling the actions after restart button has been pressed
@@ -84,6 +106,10 @@ namespace dotnetAnima
             this.buttonClickedCount = 0;
             this.textCount = 0;
             this.progressCount = 0;
+            speakerName.Visibility = Visibility.Hidden;
+            pageText.Visibility = Visibility.Visible;
+            info.Visibility = Visibility.Hidden;
+            info2.Visibility = Visibility.Hidden;
             pageText.Text = stringList[0];
             instructions.Inlines.Clear();
             instructions.Inlines.Add(new Run("Select START READING") { FontWeight = FontWeights.Bold });
@@ -160,6 +186,16 @@ namespace dotnetAnima
             else 
             {
                 this.textCount--;
+            }
+        }
+
+        private void SpeakerNameTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(speakerName != null && speakerName.Visibility != Visibility.Hidden)
+            {
+                frontendJsonObject["speakerName"] = speakerName.Text;
+                frontendJsonObject["nameOfCurrentUser"] = frontendJsonObject["speakerName"];
+
             }
         }
 

@@ -13,24 +13,35 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace dotnetAnima
 {
     /// <summary>
     /// Interaction logic for TextToSpeechWindow.xaml
     /// </summary>
+    /// 
+    // Have 2 json files - 1 for the frontend 1 for the backend (avoid race conditions)
     public partial class TextToSpeechWindow : Window
     {
-        string jsonFilePath;
-        Dictionary<string, string> jsonObject;
+        private string frontendJsonFilePath;
+        private string backendJsonFilePath;
+        private Dictionary<string, string> frontendJsonObject;
+        private Dictionary<string, string> backendJsonObject;
         public TextToSpeechWindow()
         {
             InitializeComponent();
-            // Read the JSON file to get information about the current user
-            jsonFilePath = @"../../abc.json";
-            string jsonContent = File.ReadAllText(jsonFilePath);
-            jsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
-            string nameOfUser = jsonObject["nameOfCurrentUser"];
+            // Frontend JSON 
+            frontendJsonFilePath = @"../../frontend.json";
+            string frontendJsonContent = File.ReadAllText(frontendJsonFilePath);
+            frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
+
+            // Backend JSON 
+            backendJsonFilePath = @"../../backend.json";
+            string backendJsonContent = File.ReadAllText(backendJsonFilePath);
+            backendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(backendJsonContent);
+
+            string nameOfUser = frontendJsonObject["nameOfCurrentUser"];
             string newText = selectedVoice.Text + nameOfUser;
             selectedVoice.Text = newText;
         }
@@ -38,23 +49,47 @@ namespace dotnetAnima
         // Send the content typed by the user via registering it to the Json file
         private void Speak(object sender, RoutedEventArgs e)
         {
-            jsonObject["content"] = myTextBox.Text;
-            string updatedJsonContent = JsonConvert.SerializeObject(jsonObject, Formatting.Indented);
-            File.WriteAllText(jsonFilePath, updatedJsonContent);
+            string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
+            File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
         }
 
+        // Send user to Manage Voice Window
         private void ManageVoices(object sender, RoutedEventArgs e)
         {
-            //ManageVoicesWindow manageWindow = new ManageVoicesWindow();
-            //this.Close();
-            //manageWindow.Left = this.Left;
-            //manageWindow.Top = this.Top;
-            //manageWindow.Show();
+            ManageVoicesWindow manageWindow = new ManageVoicesWindow();
+            this.Close();
+            manageWindow.Left = this.Left;
+            manageWindow.Top = this.Top;
+            manageWindow.Show();
         }
 
-        private void ReadFromImageButton(object sender, RoutedEventArgs e)
+        // Read from image button - Implement backend functionality for this to work
+        private async void ReadFromImageButton(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            bool? response = dialog.ShowDialog();
+            if(response == true)
+            {
+                string filePath = dialog.FileName;
+                frontendJsonObject["readFilePath"] = filePath;
+                await SendFileContentBackToFrontend();
+            }
+        }
 
+        // Helper
+        private async Task SendFileContentBackToFrontend()
+        {
+            await Task.Delay(1000);
+            string processedContent = backendJsonObject["readFileContent"];
+            myTextBox.Text = processedContent;
+        }
+
+        private void MyTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(myTextBox != null && myTextBox.Text != "")
+            {
+                frontendJsonObject["content"] = myTextBox.Text;
+            }
         }
     }
 }

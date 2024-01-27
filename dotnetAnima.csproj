@@ -113,6 +113,9 @@
       <DependentUpon>AnimaLogoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\AudioRecorder.cs" />
+    <Compile Include="ManageVoicesWindow.xaml.cs">
+      <DependentUpon>ManageVoicesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ManageVoiceProfilePage.xaml.cs">
       <DependentUpon>ManageVoiceProfilePage.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ManageVoicesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,6 +231,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ThingsToInclude.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
