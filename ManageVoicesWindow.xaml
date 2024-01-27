@@ -50,6 +50,7 @@
                           Grid.ColumnSpan="2" Margin="0,0,245,33">
                 <Border Background="DeepSkyBlue" CornerRadius="20" Margin="20">
                     <StackPanel Margin="20,20,0,0"
+                                Name="groupPanel"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top">
 
@@ -63,7 +64,9 @@
 
 
                         <!-- Make this dynamic content -->
-                        <CheckBox Content="Option 1"
+                        <RadioButton Content="Option 1"
+                                  GroupName="VoiceSelection"
+                                  Name="yourVoiceRadioButton"
                                   Foreground="AntiqueWhite"
                                   Margin="0,0,0,10"
                                   FontSize="25"
@@ -80,21 +83,6 @@
                                    Text="Other Voices"
                                    Margin="0,0,0,10"/>
 
-                        <!-- Again dynamic -->
-                        <CheckBox Content="Option 2"
-                                  Foreground="AntiqueWhite"
-                                  Margin="0,0,0,10"
-                                  FontSize="25"
-                                  FontWeight="DemiBold"
-                                  FontStyle="Italic"
-                                  FontFamily="Times New Roman"/>
-                        <CheckBox Content="Option 3"
-                                  Foreground="AntiqueWhite"
-                                  Margin="0,0,0,10"
-                                  FontSize="25"
-                                  FontWeight="DemiBold"
-                                  FontStyle="Italic"
-                                  FontFamily="Times New Roman"/>
                         <!-- Add more options dynamically as needed -->
                     </StackPanel>
                 </Border>
