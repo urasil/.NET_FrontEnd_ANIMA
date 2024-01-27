@@ -144,13 +144,8 @@ namespace dotnetAnima
 
         private void Speak(object sender, RoutedEventArgs e)
         {
-            /*
-            TextToSpeechWindow speechWindow = new TextToSpeechWindow();
-            this.Close();
-            speechWindow.Left = this.Left;
-            speechWindow.Top = this.Top;
-            speechWindow.Show();
-            */
+
+            this.NavigationService.Navigate(new TextToSpeechWindow());
         }
     }
 }
