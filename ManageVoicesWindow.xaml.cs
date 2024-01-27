@@ -21,13 +21,44 @@ namespace dotnetAnima
     /// </summary>
     public partial class ManageVoicesWindow : Page
     {
+        // Back end
+        string backendJsonFilePath = @"../../backend.json";
         private string backendJsonContent = File.ReadAllText("../../backend.json");
         private Dictionary<string, string> backendJsonObject;
+
+        // Front end
+        string frontendJsonFilePath = @"../../frontend.json";
+        private string frontendJsonContent = File.ReadAllText("../../frontend.json");
+        private Dictionary<string, string> frontendJsonObject;
+        List<string> listOfNames;
         public ManageVoicesWindow()
         {
             InitializeComponent();
             backendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(backendJsonContent);
-            List<string> listOfNames = ExtractNames();
+            frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
+            listOfNames = ExtractNames();
+            string currentUser = frontendJsonObject["nameOfCurrentUser"];
+            yourVoiceRadioButton.Content = currentUser;
+
+
+            foreach (string name in listOfNames)
+            {
+                if(name != currentUser)
+                {
+                    RadioButton radioButton = new RadioButton();
+                    radioButton.Content = name;
+                    radioButton.Name = name;
+                    radioButton.Foreground = Brushes.AntiqueWhite;
+                    radioButton.Margin = new Thickness(0, 0, 0, 10);
+                    radioButton.FontSize = 25;
+                    radioButton.FontWeight = FontWeights.DemiBold;
+                    radioButton.FontStyle = FontStyles.Italic;
+                    radioButton.FontFamily = new FontFamily("Times New Roman");
+                    radioButton.GroupName = "VoiceSelection";
+                    groupPanel.Children.Add(radioButton);
+                }
+                
+            }
 
         }
 
@@ -48,9 +79,31 @@ namespace dotnetAnima
 
         }
 
-        private void ImportVoice(object sender, RoutedEventArgs e)
+        private async void ImportVoice(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            bool? response = dialog.ShowDialog();
+            if (response == true)
+            {
+                string filePath = dialog.FileName;
+                frontendJsonObject["importFilePath"] = filePath;
+                string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
+                File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
+                await SendFileContentBackToFrontend();
+                if(backendJsonObject["importSuccess"] == "false")
+                {
+                    MessageBox.Show("Coudln't create a voice profile from uploaded file");
+                }
+                
+            }
+        }
 
+        private async Task SendFileContentBackToFrontend()
+        {
+            while (backendJsonObject["importSuccess"] != "true" || backendJsonObject["importSuccess"] != "false")
+            {
+                await Task.Delay(1000);
+            }
         }
 
         private void DeleteVoice(object sender, RoutedEventArgs e)
@@ -60,6 +113,32 @@ namespace dotnetAnima
 
         private void SelectVoice(object sender, RoutedEventArgs e)
         {
+            string oldUser = frontendJsonObject["nameOfCurrentUser"];
+            foreach (var child in groupPanel.Children)
+            {
+                if(child is RadioButton radioButton &&  radioButton.IsChecked == true)
+                {
+                    frontendJsonObject["nameOfCurrentUser"] = radioButton.Content.ToString();
+                    string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
+                    File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
+                    break;
+                }
+            }
+            string currentUser = frontendJsonObject["nameOfCurrentUser"];
+            foreach (var child in groupPanel.Children)
+            {
+                if (child is RadioButton radioButton)
+                {
+                    if (radioButton.Content == currentUser) 
+                    {
+                        radioButton.Content = oldUser;
+                        break;
+                    }
+                }
+
+            }
+            yourVoiceRadioButton.Content = currentUser;
+            yourVoiceRadioButton.IsChecked = true;
 
         }
 

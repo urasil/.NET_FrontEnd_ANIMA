@@ -95,7 +95,7 @@
             <TextBlock HorizontalAlignment="Left" 
             Margin="58,84,0,0" 
             Grid.Row="1" 
-            Text="Enter text here: "
+            Text="Enter text below"
             TextWrapping="Wrap" 
             VerticalAlignment="Top"
             FontSize="25"
