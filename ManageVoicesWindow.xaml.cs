@@ -19,7 +19,7 @@ namespace dotnetAnima
     /// <summary>
     /// Interaction logic for ManageVoicesWindow.xaml
     /// </summary>
-    public partial class ManageVoicesWindow : Window
+    public partial class ManageVoicesWindow : Page
     {
         private string backendJsonContent = File.ReadAllText("../../backend.json");
         private Dictionary<string, string> backendJsonObject;
@@ -65,11 +65,13 @@ namespace dotnetAnima
 
         private void Speak(object sender, RoutedEventArgs e)
         {
+            /*
             TextToSpeechWindow speechWindow = new TextToSpeechWindow();
             this.Close();
             speechWindow.Left = this.Left;
             speechWindow.Top = this.Top;
             speechWindow.Show();
+            */
         }
     }
 }

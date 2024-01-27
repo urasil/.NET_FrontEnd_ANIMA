@@ -22,7 +22,7 @@ namespace dotnetAnima
     /// </summary>
     /// 
     // Have 2 json files - 1 for the frontend 1 for the backend (avoid race conditions)
-    public partial class TextToSpeechWindow : Window
+    public partial class TextToSpeechWindow : Page
     {
         private string frontendJsonFilePath;
         private string backendJsonFilePath;
@@ -56,11 +56,7 @@ namespace dotnetAnima
         // Send user to Manage Voice Window
         private void ManageVoices(object sender, RoutedEventArgs e)
         {
-            ManageVoicesWindow manageWindow = new ManageVoicesWindow();
-            this.Close();
-            manageWindow.Left = this.Left;
-            manageWindow.Top = this.Top;
-            manageWindow.Show();
+            this.NavigationService.Navigate(new ManageVoicesWindow());
         }
 
         // Read from image button - Implement backend functionality for this to work
