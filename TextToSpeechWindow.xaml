@@ -56,12 +56,13 @@
             <TextBox Name="myTextBox"
              Style="{StaticResource RoundedTextBoxTheme}"
              Width="578" 
+             Text=""
              Height="350" 
              VerticalAlignment="Top" 
              HorizontalAlignment="Left"
              Grid.Row="2"
              Grid.ColumnSpan="2" 
-             Margin="20,24,0,0"/>
+             Margin="20,24,0,0" TextChanged="MyTextBoxTextChanged"/>
 
             <!-- Manage Voices Button -->
             <Button Content="MANAGE VOICES"

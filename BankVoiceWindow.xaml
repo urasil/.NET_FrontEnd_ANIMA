@@ -43,6 +43,8 @@
                 </TextBlock.Effect>
             </TextBlock>
 
+
+
             <!-- Setting up voice TextBlock -->
             <TextBlock Text="Setting up your voice"
                        Grid.Row="0"
@@ -136,6 +138,7 @@
             Height="50"
             Margin="234,347,301,23" Click="StartRecording"/>
 
+            <!-- Listen Button -->
             <Button Content="LISTEN RECORDING"
             Name="listenButton"
             Foreground="White"
@@ -146,11 +149,49 @@
             Margin="488,350,67,25" 
             Click="ListenRecording"/>
 
+            <!-- Start Over Button -->
             <Button Content="START OVER"
             Name="restartButton"
             Visibility="Hidden"
             Style="{StaticResource StartOverButtonTheme}"
             Click="RestartClick" Grid.Column="1" Margin="49,352,551,23" Grid.Row="2"/>
+
+            <!-- Name entering field -->
+            <Grid Grid.Column="1" Grid.Row="2">
+                <TextBox Style="{StaticResource RoundedTextBoxTheme}" 
+                 HorizontalAlignment="Left" 
+                 Name="speakerName"
+                 TextWrapping="Wrap"
+                 Visibility="Hidden"
+                 Text="..." 
+                 TextChanged="SpeakerNameTextChanged"
+                 VerticalAlignment="Top" 
+                 Width="331" Height="34" Margin="182,187,0,0"/>
+
+                <TextBlock FontSize="18"
+                   FontStyle="Normal"
+                   Name="info"
+                   FontWeight="SemiBold"
+                   Visibility="Hidden"
+                   HorizontalAlignment="Left" 
+                   TextWrapping="Wrap" 
+                   Text="Enter your name below and press ALL DONE! to continue!" 
+                   VerticalAlignment="Top" 
+                   Height="56" 
+                   Width="331" Margin="182,126,0,0"/>
+
+                <TextBlock FontSize="16"
+                   Name="info2"
+                   Visibility="Hidden"
+                   FontStyle="Italic"
+                   FontWeight="Medium"
+                   HorizontalAlignment="Left" 
+                   TextWrapping="Wrap" 
+                   Text="Choose your name carefully, you won't be able to change it again!" 
+                   VerticalAlignment="Top" 
+                   Height="46" 
+                   Width="331" Margin="182,226,0,0"/>
+            </Grid>
 
         </Grid>
     </Border>

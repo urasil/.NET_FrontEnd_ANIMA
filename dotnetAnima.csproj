@@ -217,5 +217,8 @@
   <ItemGroup>
     <Resource Include="requirements.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ThingsToInclude.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

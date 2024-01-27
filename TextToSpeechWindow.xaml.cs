@@ -49,7 +49,6 @@ namespace dotnetAnima
         // Send the content typed by the user via registering it to the Json file
         private void Speak(object sender, RoutedEventArgs e)
         {
-            frontendJsonObject["content"] = myTextBox.Text;
             string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
             File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
         }
@@ -83,6 +82,14 @@ namespace dotnetAnima
             await Task.Delay(1000);
             string processedContent = backendJsonObject["readFileContent"];
             myTextBox.Text = processedContent;
+        }
+
+        private void MyTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(myTextBox != null && myTextBox.Text != "")
+            {
+                frontendJsonObject["content"] = myTextBox.Text;
+            }
         }
     }
 }

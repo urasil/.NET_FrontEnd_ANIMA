@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace dotnetAnima
 {
@@ -19,9 +21,25 @@ namespace dotnetAnima
     /// </summary>
     public partial class ManageVoicesWindow : Window
     {
+        private string backendJsonContent = File.ReadAllText("../../backend.json");
+        private Dictionary<string, string> backendJsonObject;
         public ManageVoicesWindow()
         {
             InitializeComponent();
+            backendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(backendJsonContent);
+            List<string> listOfNames = ExtractNames();
+
+        }
+
+        private List<string> ExtractNames()
+        {
+            string names = backendJsonObject["animaProfiles"];
+            List<string> listOfNames = names.Split(' ').ToList();
+            for(int i = 0; i < listOfNames.Count; i++) 
+            {
+                listOfNames[i] = listOfNames[i].Trim().Replace(".animaProfile", "");
+            }
+            return listOfNames;
         }
 
 
