@@ -24,7 +24,7 @@ namespace dotnetAnima
     /// <summary>
     /// Interaction logic for BankVoiceWindow.xaml
     /// </summary>
-    public partial class BankVoiceWindow : Window
+    public partial class BankVoiceWindow : Page
     {
         int progressCount, textCount, buttonClickedCount;
         
@@ -90,11 +90,8 @@ namespace dotnetAnima
         {
             string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
             File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
-            TextToSpeechWindow speechWindow = new TextToSpeechWindow();
-            this.Close();
-            speechWindow.Left = this.Left;
-            speechWindow.Top = this.Top;
-            speechWindow.Show();
+            
+            this.NavigationService.Navigate(new TextToSpeechWindow());
             recorder.StopSound();
         }
 

@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
 
 namespace dotnetAnima
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ManageVoiceProfilePage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ManageVoiceProfilePage : Page
     {
-        public MainWindow()
+        public ManageVoiceProfilePage()
         {
-
             InitializeComponent();
-            MainFrame.Navigate(new AnimaHomePage());
         }
-
-        
     }
 }
