@@ -31,8 +31,11 @@ namespace dotnetAnima
         List<string> stringList;
         AudioRecorder recorder;
 
-        string frontendJsonFilePath;
+        private string frontendJsonFilePath;
         private Dictionary<string, string> frontendJsonObject;
+
+        private string backendJsonFilePath;
+        private Dictionary<string, string> backendJsonObject;
         public BankVoiceWindow()
         {
             InitializeComponent();
@@ -45,7 +48,12 @@ namespace dotnetAnima
             frontendJsonFilePath = @"../../../frontend.json";
             string frontendJsonContent = File.ReadAllText(frontendJsonFilePath);
             frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
-            
+
+            backendJsonFilePath = @"../../../frontend.json";
+            string backendJsonFileContent = File.ReadAllText(frontendJsonFilePath);
+            backendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(backendJsonFileContent);
+
+
             this.progressCount = 0;
             this.buttonClickedCount = 0;
             this.textCount = 0;
@@ -77,6 +85,7 @@ namespace dotnetAnima
             // Going to the next page
             if (this.buttonClickedCount == 12)
             {
+                // needs an aysnc function that awaits confirmation from backend
                 FinishingUpWithRegistration();
             }
             this.textCount++;
@@ -86,14 +95,26 @@ namespace dotnetAnima
             ChangeBorderColors();
         }
 
-        public void FinishingUpWithRegistration()
+        private async void FinishingUpWithRegistration()
         {
             string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
             File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
+
+            await WaitBackendConfirmationForProfileCreation();
             
             this.NavigationService.Navigate(new TextToSpeechWindow());
             recorder.StopSound();
         }
+
+        private async Task WaitBackendConfirmationForProfileCreation()
+        {
+            while (backendJsonObject["profileCreationSuccess"] != "true")
+            {
+                await Task.Delay(1000);
+            }
+        }
+
+
 
         // Handling the actions after restart button has been pressed
         public void RestartClick(object sender, RoutedEventArgs e)
@@ -192,7 +213,6 @@ namespace dotnetAnima
             {
                 frontendJsonObject["speakerName"] = speakerName.Text;
                 frontendJsonObject["nameOfCurrentUser"] = frontendJsonObject["speakerName"];
-
             }
         }
 
