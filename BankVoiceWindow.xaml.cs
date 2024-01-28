@@ -42,7 +42,7 @@ namespace dotnetAnima
 
             recorder = new AudioRecorder();
             
-            frontendJsonFilePath = @"../../frontend.json";
+            frontendJsonFilePath = @"../../../frontend.json";
             string frontendJsonContent = File.ReadAllText(frontendJsonFilePath);
             frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
             
@@ -60,7 +60,7 @@ namespace dotnetAnima
             // Starting the voice recording
             if (this.buttonClickedCount == 1)
             {
-                recorder.StartRecording("../../output.wav");
+                recorder.StartRecording("../../../output.wav");
                 restartButton.Visibility = Visibility.Visible;
             }
 

@@ -14,6 +14,9 @@ using System.Windows.Shapes;
 using System.IO;
 using Newtonsoft.Json;
 
+// What is left to do?
+// Import my voice
+
 namespace dotnetAnima
 {
     /// <summary>
@@ -22,19 +25,18 @@ namespace dotnetAnima
     public partial class ManageVoicesWindow : Page
     {
         // Back end
-        string backendJsonFilePath = @"../../backend.json";
-        private string backendJsonContent = File.ReadAllText("../../backend.json");
+        string backendJsonFilePath = @"../../../backend.json";
+        private string backendJsonContent = File.ReadAllText("../../../backend.json");
         private Dictionary<string, string> backendJsonObject;
 
         // Front end
-        string frontendJsonFilePath = @"../../frontend.json";
-        private string frontendJsonContent = File.ReadAllText("../../frontend.json");
+        string frontendJsonFilePath = @"../../../frontend.json";
+        private string frontendJsonContent = File.ReadAllText("../../../frontend.json");
         private Dictionary<string, string> frontendJsonObject;
-        List<string> listOfNames;
+        string[] listOfNames;
         public ManageVoicesWindow()
         {
             InitializeComponent();
-            backendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(backendJsonContent);
             frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
             listOfNames = ExtractNames();
             string currentUser = frontendJsonObject["nameOfCurrentUser"];
@@ -62,23 +64,27 @@ namespace dotnetAnima
 
         }
 
-        private List<string> ExtractNames()
+        private string[] ExtractNames()
         {
-            string names = backendJsonObject["animaProfiles"];
-            List<string> listOfNames = names.Split(' ').ToList();
-            for(int i = 0; i < listOfNames.Count; i++) 
+            string[] filePaths = Directory.GetFiles("../../../animaProfiles");
+            string[] namesList = new string[filePaths.Length];
+
+            for (int i = 0; i < filePaths.Length; i++)
             {
-                listOfNames[i] = listOfNames[i].Trim().Replace(".animaProfile", "");
+                string fileName = System.IO.Path.GetFileNameWithoutExtension(filePaths[i]);
+                namesList[i] = fileName;
             }
-            return listOfNames;
+
+            return namesList;
         }
 
 
         private void RedoVoice(object sender, RoutedEventArgs e)
         {
-
+            this.NavigationService.Navigate(new BankVoiceWindow());
         }
 
+        // Needs backend functionality
         private async void ImportVoice(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -106,9 +112,71 @@ namespace dotnetAnima
             }
         }
 
+        // Delete Voice Button Functions
+
+        private RadioButton FindCheckedRadioButton()
+        {
+            RadioButton checkedRadioButton = null;
+            foreach (var child in groupPanel.Children)
+            {
+                if (child is RadioButton radioButton && radioButton.IsChecked == true)
+                {
+                    checkedRadioButton = radioButton;
+                    break;
+                }
+            }
+            return checkedRadioButton;
+        }
+        private void UpdateFrontendJsonFile()
+        {
+            string updatedJsonContent = JsonConvert.SerializeObject(frontendJsonObject, Formatting.Indented);
+            File.WriteAllText(frontendJsonFilePath, updatedJsonContent);
+        }
         private void DeleteVoice(object sender, RoutedEventArgs e)
         {
+            RadioButton checkedRadioButton = FindCheckedRadioButton();
 
+            if (checkedRadioButton != null)
+            {
+                string animaProfileName = checkedRadioButton.Content.ToString() + ".animaProfile";
+                int radioButtonCount = groupPanel.Children.OfType<RadioButton>().Count();
+                string animaProfilePath = System.IO.Path.Combine("../../../animaProfiles", animaProfileName);
+                if (File.Exists(animaProfilePath) && radioButtonCount > 1)
+                {
+                    File.Delete(animaProfilePath);
+
+                    if (checkedRadioButton.Content.ToString() != frontendJsonObject["nameOfCurrentUser"])
+                    {
+                        groupPanel.Children.Remove(checkedRadioButton);
+                        yourVoiceRadioButton.IsChecked = true;
+                    }
+                    else
+                    {
+
+                        RadioButton[] radioButtons = groupPanel.Children.OfType<RadioButton>().ToArray();
+                        foreach (RadioButton radioButton in radioButtons)
+                        {
+                            if (radioButton.Content.ToString() != frontendJsonObject["nameOfCurrentUser"])
+                            {
+                                frontendJsonObject["nameOfCurrentUser"] = radioButton.Content.ToString();
+                                yourVoiceRadioButton.Content = frontendJsonObject["nameOfCurrentUser"];
+                                yourVoiceRadioButton.IsChecked = true;
+                                groupPanel.Children.Remove(radioButton);
+                                break;
+                            }
+                        }
+                        UpdateFrontendJsonFile();
+
+                    }
+                }
+
+                else
+                {
+                    MessageBox.Show("Record one more voice to delete this one!");
+                }
+                    
+            }
+            
         }
 
         private void SelectVoice(object sender, RoutedEventArgs e)

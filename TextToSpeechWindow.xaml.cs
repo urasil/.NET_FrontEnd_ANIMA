@@ -32,12 +32,12 @@ namespace dotnetAnima
         {
             InitializeComponent();
             // Frontend JSON 
-            frontendJsonFilePath = @"../../frontend.json";
+            frontendJsonFilePath = @"../../../frontend.json";
             string frontendJsonContent = File.ReadAllText(frontendJsonFilePath);
             frontendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(frontendJsonContent);
 
             // Backend JSON 
-            backendJsonFilePath = @"../../backend.json";
+            backendJsonFilePath = @"../../../backend.json";
             string backendJsonContent = File.ReadAllText(backendJsonFilePath);
             backendJsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(backendJsonContent);
 
@@ -59,6 +59,11 @@ namespace dotnetAnima
             this.NavigationService.Navigate(new ManageVoicesWindow());
         }
 
+        private void UpdateFrontendJsonFile()
+        {
+            UpdateFrontendJsonFile();
+        }
+
         // Read from image button - Implement backend functionality for this to work
         private async void ReadFromImageButton(object sender, RoutedEventArgs e)
         {
@@ -68,14 +73,17 @@ namespace dotnetAnima
             {
                 string filePath = dialog.FileName;
                 frontendJsonObject["readFilePath"] = filePath;
+                UpdateFrontendJsonFile();
                 await SendFileContentBackToFrontend();
             }
         }
 
-        // Helper
         private async Task SendFileContentBackToFrontend()
         {
-            await Task.Delay(1000);
+            while (backendJsonObject["readContentSuccess"].ToString() == "true")
+            {
+                await Task.Delay(1000);
+            }
             string processedContent = backendJsonObject["readFileContent"];
             myTextBox.Text = processedContent;
         }
